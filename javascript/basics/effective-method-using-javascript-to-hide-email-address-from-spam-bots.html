@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Effective method using javascript to hide Email address in a webpage from spam bots</title>
+	
+	<meta name="author" content="herotl2005">
+
+	<!-- Enable responsive viewport -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- styles -->
+	<link href="/assets/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/assets/resources/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<link href="/assets/resources/syntax/syntax.css" rel="stylesheet">
+	<link href="/assets/css/style.css" rel="stylesheet">
+
+	<!-- fav and touch icons -->
+	<!-- Update these with your own images
+	<link rel="shortcut icon" href="images/favicon.ico">
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+	-->
+
+	<link rel="alternate" type="application/rss+xml" title="" href="/feed.xml">
+</head>
+
+<body>
+	<nav class="navbar navbar-default visible-xs" role="navigation">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			
+			<a type="button" class="navbar-toggle nav-link" href="http://github.com/herotl2005">
+				<i class="fa fa-github"></i>
+			</a>
+			
+			
+			<a type="button" class="navbar-toggle nav-link" href="http://twitter.com/NewsFeedVn">
+				<i class="fa fa-twitter"></i>
+			</a>
+			
+			
+			<a class="navbar-brand" href="/">
+				<img src="http://www.gravatar.com/avatar/?s=35" class="img-circle" />
+				jooly.net blog
+			</a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="/">Home</a></li>
+				<li><a href="/categories.html">Categories</a></li>
+				<li><a href="/tags.html">Tags</a></li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+	</nav>
+
+	<!-- nav-menu-dropdown -->
+	<div class="btn-group hidden-xs" id="nav-menu">
+		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+			<i class="fa fa-bars"></i>
+		</button>
+		<ul class="dropdown-menu" role="menu">
+			<li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+			<li><a href="/categories.html"><i class="fa fa-folder"></i>Categories</a></li>
+			<li><a href="/tags.html"><i class="fa fa-tags"></i>Tags</a></li>
+			<li class="divider"></li>
+			<li><a href="#"><i class="fa fa-arrow-up"></i>Top of Page</a></li>
+		</ul>
+	</div>
+
+	<div class="col-sm-3 col-sm-offset-9 sidebar hidden-xs">
+		<! -- sidebar.html -->
+<header class="sidebar-header" role="banner">
+	<a href="/">
+		<img src="/assets/avatars/default.png" width="150" class="img-circle" />
+	</a>
+	<h3 class="title">
+        <a href="/">jooly.net blog</a>
+    </h3>
+</header>
+
+
+<div id="bio" class="text-center">
+	Software Developer
+</div>
+
+
+<div id="contact-list" class="text-center">
+	<ul class="list-unstyled list-inline">
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://github.com/herotl2005">
+				<i class="fa fa-github-alt fa-lg"></i>
+			</a>
+		</li>
+		
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://twitter.com/NewsFeedVn">
+				<i class="fa fa-twitter fa-lg"></i>
+			</a>
+		</li>
+		
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://facebook.com/herotl">
+				<i class="fa fa-facebook fa-lg"></i>
+			</a>
+		</li>
+		
+	</ul>
+	<ul id="contact-list-secondary" class="list-unstyled list-inline">
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://linkedin.com/pub/hungnguyendang">
+				<i class="fa fa-linkedin fa-lg"></i>
+			</a>
+		</li>
+		
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="/feed.xml">
+				<i class="fa fa-rss fa-lg"></i>
+			</a>
+		</li>
+	</ul>
+</div>
+<! -- sidebar.html end -->
+
+	</div>
+
+	<div class="col-sm-9">
+		<div class="page-header">
+  <h1>Effective method using javascript to hide Email address in a webpage from spam bots </h1>
+</div>
+	
+<article>
+	<div class="col-sm-12">
+	 <span class="post-date">
+	   
+	   September 
+	   12th,
+	   
+	   2014
+	 </span>
+	  <div class="article_body">
+	  <p>On my website, I use a link had ‘mailto’ attribute to facilitate reader email to me, but I’m afraid of crawling from spam bots that want to extract my address. So, I would like to encode my email address in HTML code, and using javascript to decode it when browser parses and shows the page.</p>
+
+<p>The method that presented here has 2 parts:</p>
+
+<ol>
+  <li>The encoder generates a string into an object contained key and encoded text;</li>
+  <li>The decoder gets key and encoded text as inputs and transforms them into original plain text.</li>
+</ol>
+
+<p><img src="/media/4465f240-a8e7-4baa-9814-bbe74978762d/javascript_hiding_email_diagram.png" alt="Figure 1. Hiding email diagram" /></p>
+
+<h2 id="encoding-process">Encoding process</h2>
+
+<h3 id="extracting-unique-characters-from-string">Extracting unique characters from string</h3>
+
+<p>The first step of this process is extracting unique characters, ie removing the duplicated characters in the string. The <strong>extractUniqueChars()</strong> uses an array to store collected characters. It loop through the input string and pick up characters that haven’t existed in array.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">extractUniqueChars</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">[];</span>
+	<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">str</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+		    <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">i</span><span class="p">));</span>
+		<span class="p">}</span> 
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+
+<h3 id="shuffle-the-array-of-characters">Shuffle the array of characters</h3>
+
+<p>In the second step, we disarrange the collected array by <strong>shuffleArray()</strong> function.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">shuffleArray</span><span class="p">(</span><span class="nx">array</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">array</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+        <span class="kd">var</span> <span class="nx">temp</span> <span class="o">=</span> <span class="nx">array</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="nx">array</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">array</span><span class="p">[</span><span class="nx">j</span><span class="p">];</span>
+        <span class="nx">array</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nx">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">array</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+
+<h3 id="mixing-all-into-one-function">Mixing all into one function</h3>
+
+<p>The last step is mixing the above functions into <strong>encodeString()</strong>, which gets a string as input and generates the key and encoded text.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">encodeString</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">srcArray</span> <span class="o">=</span> <span class="nx">shuffleArray</span><span class="p">(</span><span class="nx">extractUniqueChars</span><span class="p">(</span><span class="nx">str</span><span class="p">));</span>
+	<span class="kd">var</span> <span class="nx">encodedArray</span> <span class="o">=</span> <span class="p">[];</span>
+	<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">str</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">encodedArray</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="nx">srcArray</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span> <span class="o">+</span> 
+				<span class="s1">&#39;0&#39;</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)));</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="p">{</span><span class="nx">key</span><span class="o">:</span> <span class="nx">srcArray</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">),</span> <span class="nx">value</span><span class="o">:</span> <span class="nx">encodedArray</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)};</span>
+<span class="p">}</span></code></pre></div>
+
+<p>After generating key and encoded text, the developer puts them into javascript code in a webpage. The <strong>encodeString()</strong> and related functions were kept privately (don’t include in webpage).</p>
+
+<h3 id="encoding-example">Encoding example</h3>
+
+<p>Suppose my webpage have a <em>mailto</em> link contained email address <em>pnhung177@example.com</em> as follows:</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;mailto:hideme@example.com&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;mail.png&quot;</span> <span class="na">alt=</span><span class="s">&quot;Email to me&quot;</span><span class="nt">/&gt;&lt;/a&gt;</span></code></pre></div>
+
+<p>I don’t want put this code in plain text to HTML code, so I use <strong>encodeString()</strong> to create the encoded text (and the key, certainly) and store them to webpage.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">encoded</span> <span class="o">=</span> <span class="nx">encodeString</span><span class="p">(</span>
+	<span class="s1">&#39;&lt;a href=&quot;mailto:hideme@example.com&quot;&gt;&lt;img src=&quot;mail.png&quot; alt=&quot;Email to me&quot;/&gt;&lt;/a&gt;&#39;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">encoded</span><span class="p">);</span>
+
+<span class="nb">Object</span> <span class="p">{</span>
+<span class="nx">key</span><span class="o">:</span> <span class="s2">&quot;i@se:ldt/&lt;com&gt;=.raEpx hf&quot;</span><span class="nx">ng</span><span class="s2">&quot;, </span>
+<span class="s2">value: &quot;</span><span class="mi">9</span><span class="nx">AEF</span><span class="err">@</span><span class="mi">3</span><span class="nx">G</span><span class="o">&gt;</span><span class="nx">H</span><span class="o">&lt;</span><span class="nx">A057</span><span class="p">;</span><span class="mi">4</span><span class="nx">F063</span><span class="o">&lt;</span><span class="mi">313</span><span class="nx">DA</span><span class="o">&lt;</span><span class="nx">C53</span><span class="o">?:</span><span class="p">;</span><span class="o">&lt;</span><span class="nx">H</span><span class="o">=</span><span class="mi">90</span><span class="o">&lt;</span><span class="nx">JE2</span><span class="err">@</span><span class="o">:&gt;</span><span class="nx">H</span><span class="o">&lt;</span><span class="nx">A05</span><span class="o">?</span><span class="nx">CIJHEA57</span><span class="o">&gt;</span><span class="nx">HB</span><span class="o">&lt;</span><span class="nx">A05E7</span><span class="p">;</span><span class="nx">E</span><span class="o">&lt;</span><span class="mi">3</span><span class="nx">H8</span><span class="o">=</span><span class="mi">98</span><span class="nx">A</span><span class="o">=</span><span class="err">&quot;</span>
+<span class="p">}</span></code></pre></div>
+
+<h2 id="decoding-process">Decoding process</h2>
+
+<p>The decoding process is simpler than the encoding process. It may be defined by only one function as follows:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">decodeString</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">encodedText</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">decodedArray</span> <span class="o">=</span> <span class="p">[];</span>
+	<span class="k">for</span><span class="p">(</span><span class="nx">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">j</span><span class="o">&lt;</span><span class="nx">encodedText</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">decodedArray</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">key</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">encodedText</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">j</span><span class="p">)</span><span class="o">-</span><span class="mi">48</span><span class="p">));</span>
+	<span class="p">};</span> 
+	<span class="k">return</span> <span class="nx">decodedArray</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+
+<p>The decodeString() function together with applied code (ie called decodeString() with specific input) were declared inside HTML page.</p>
+
+<h2 id="reference">Reference</h2>
+
+<ul>
+  <li><a href="http://www.w3schools.com/jsref/default.asp">JavaScript Reference - W3Schools</a></li>
+  <li><a href="http://en.wikipedia.org/wiki/Fisher-Yates_shuffle">Fisher-Yates shuffle array algorithm</a></li>
+</ul>
+
+
+	  </div>
+
+		
+		<ul class="tag_box list-unstyled list-inline">
+		  <li><i class="fa fa-folder-open"></i></li>
+		  
+		  
+			 
+				<li><a href="/categories.html#javascript-ref">
+					javascript <span>(1)</span>
+					,
+				</a></li>
+			 
+				<li><a href="/categories.html#basics-ref">
+					basics <span>(1)</span>
+					
+				</a></li>
+			
+		  
+		</ul>
+		  
+
+		
+		<ul class="list-inline">
+		  <li><i class="fa fa-tags"></i></li>
+		  
+		  
+			 
+				<li>
+					<a href="/tags.html#Javascript-ref">
+					Javascript <span>(1)</span>
+					,
+					</a>
+				</li>
+			 
+				<li>
+					<a href="/tags.html#Hiding email address-ref">
+					Hiding email address <span>(1)</span>
+					
+					</a>
+				</li>
+			
+		  
+		  
+		</ul>
+		  
+
+	<hr/>
+
+	<div>
+      <section class="share col-sm-6">
+        <h4 class="section-title">Share Post</h4>
+        <a class="btn btn-default btn-sm twitter" href="http://twitter.com/share?text=Effective method using javascript to hide Email address in a webpage from spam bots&via=NewsFeedVn"
+           onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+          <i class="fa fa-twitter fa-lg"></i>
+          Twitter
+        </a>
+        <a class="btn btn-default btn-sm facebook" href="https://www.facebook.com/sharer/sharer.php"
+           onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+          <i class="fa fa-facebook fa-lg"></i>
+          Facebook
+        </a>
+        <a class="btn btn-default btn-sm gplus"
+           onclick="window.open('https://plus.google.com/share?url='+window.location.href, 'google-plus-share', 'width=490,height=530');return false;">
+          <i class="fa fa-google-plus fa-lg"></i>
+          Google+
+        </a>
+      </section>
+
+      <section class="col-sm-6 author">
+        <img src="/assets/avatars/pnhung177.png" width="80" class="img-rounded author-image" />
+        <h4 class="section-title author-name">herotl2005</h4>
+        <p class="author-bio">Software Developer</p>
+      </section>
+    </div>
+
+    <div class="clearfix"></div>
+
+		<ul class="pager">
+		  
+		  <li class="previous disabled"><a>&larr; Previous</a></li>
+		  
+		  
+		  <li class="next"><a href="/java/groovy/snippet/converting-data-from-excel-to-mysql-using-groovy.html" title="Converting data from excel to MySQL using Groovy">Next &rarr;</a></li>
+		  
+		</ul>
+
+		<hr>
+		
+		<section class="comments" style="margin-top:15px;">
+		  <div id="disqus_thread"></div>
+		  <script type="text/javascript">
+		    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+		    var disqus_shortname = 'jooly'; // required: replace example with your forum shortname
+		    if(disqus_shortname){
+		      /* * * DON'T EDIT BELOW THIS LINE * * */
+		      (function() {
+		        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+		      })();
+		    }
+		  </script>
+		  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		</section>
+		
+	</div>
+	
+	<div class="col-sm-2 sidebar-2"></div>
+</article>
+<div class="clearfix"></div>
+
+
+
+		<footer>
+			<hr/>
+			<p>
+				&copy; 2015 herotl2005 with Jekyll. Theme: <a href="https://github.com/dbtek/dbyll">dbyll</a> by dbtek.
+			</p>
+		</footer>
+	</div>
+
+	<script type="text/javascript" src="/assets/resources/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="/assets/resources/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/assets/js/app.js"></script>
+</body>
+</html>
+
